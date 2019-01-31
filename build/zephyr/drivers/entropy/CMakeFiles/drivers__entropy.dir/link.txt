@@ -1,2 +1,0 @@
-ccache /home/lucas/Zephyr/zephyr-sdk/sysroots/x86_64-pokysdk-linux/usr/bin/arm-zephyr-eabi/arm-zephyr-eabi-ar qc libdrivers__entropy.a  CMakeFiles/drivers__entropy.dir/entropy_nrf5.c.obj
-ccache /home/lucas/Zephyr/zephyr-sdk/sysroots/x86_64-pokysdk-linux/usr/bin/arm-zephyr-eabi/arm-zephyr-eabi-ranlib libdrivers__entropy.a

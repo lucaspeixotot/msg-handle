@@ -1,2 +1,0 @@
-ccache /home/lucas/Zephyr/zephyr-sdk/sysroots/x86_64-pokysdk-linux/usr/bin/arm-zephyr-eabi/arm-zephyr-eabi-ar qc app/libapp.a  CMakeFiles/app.dir/src/ic_version.cpp.obj CMakeFiles/app.dir/src/main.cpp.obj CMakeFiles/app.dir/src/tc_msg_manager.cpp.obj CMakeFiles/app.dir/src/tc_msg_handle.cpp.obj
-ccache /home/lucas/Zephyr/zephyr-sdk/sysroots/x86_64-pokysdk-linux/usr/bin/arm-zephyr-eabi/arm-zephyr-eabi-ranlib app/libapp.a
