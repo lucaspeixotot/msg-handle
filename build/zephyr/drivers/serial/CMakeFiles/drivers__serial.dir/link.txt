@@ -1,0 +1,2 @@
+ccache /home/lucas/Zephyr/zephyr-sdk/sysroots/x86_64-pokysdk-linux/usr/bin/arm-zephyr-eabi/arm-zephyr-eabi-ar qc libdrivers__serial.a  CMakeFiles/drivers__serial.dir/uart_nrfx_uart.c.obj
+ccache /home/lucas/Zephyr/zephyr-sdk/sysroots/x86_64-pokysdk-linux/usr/bin/arm-zephyr-eabi/arm-zephyr-eabi-ranlib libdrivers__serial.a
