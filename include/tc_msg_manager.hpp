@@ -15,6 +15,7 @@ class MsgManager
 {
    public:
     int handlePrefix(const u8_t *msg, const u8_t *pattern);
+    int subscribe(MsgHandle msgHandle);
     static MsgManager *instance()
     {
         return &m_instance;
@@ -28,7 +29,7 @@ class MsgManager
         }
     };
     static MsgManager m_instance;
-    MsgHandle m_handles[MAX_MSG_HANDLES];
+    MsgHandle *m_handles[MAX_MSG_HANDLES];
 };
 
 #endif

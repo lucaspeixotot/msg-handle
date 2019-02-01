@@ -16,6 +16,21 @@
 #include "ic_version.h"
 #include "tc_msg_manager.hpp"
 
+class LsrvdCommand : public MsgHandle
+{
+   public:
+    LsrvdCommand(const char *key) : MsgHandle(key)
+    {
+    }
+
+    int resolve(const char *content)
+    {
+        return 0;
+    }
+
+   private:
+};
+
 
 void main(void)
 {
@@ -27,7 +42,6 @@ void main(void)
     MsgManager::instance()->handlePrefix(msg, func);
 
     while (1) {
-        k_sleep(K_SECONDS(1));
     }
 }
 

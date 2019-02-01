@@ -16,8 +16,9 @@ int MsgManager::handlePrefix(const u8_t *msg, const u8_t *pattern)
     }
 
     for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
-        if (!strcmp(p, m_handles[i].key())) {
-            err = m_handles[i].resolve(content);
+        if (!strcmp(p, m_handles[i]->key())) {
+            err = m_handles[i]->resolve(content);
+            break;
         }
     }
     return err;
