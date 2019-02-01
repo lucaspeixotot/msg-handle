@@ -2,6 +2,15 @@
 
 MsgManager MsgManager::m_instance = MsgManager();
 
+int MsgManager::subscribe(MsgHandle msgHandle)
+{
+    if (msgHandle == nullptr) {
+        return -EINVAL;
+    }
+
+    return 0;
+}
+
 int MsgManager::handlePrefix(const u8_t *msg, const u8_t *pattern)
 {
     int err             = 0;
