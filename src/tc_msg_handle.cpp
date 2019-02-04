@@ -14,14 +14,51 @@ const char *MsgHandle::findPattern(const char *msg, const char *pattern)
     return strstr(msg, pattern);
 }
 
-char *strtok(char *str, const char *delimiter)
+char *MsgHandle::strtok(char *str, const char *tokens)
 {
+    // Making a static string to be used again on next function call.
     static char *temp;
 
-    char *nextDelimiter = strstr(str, delimiter);
-    *nextDelimiter      = "\0";
-}
+    // If string passed to function is not null, copy it to our static variable
+    if (str != NULL) {
+        temp = (char *) malloc(strlen(str));
+        strcpy(temp, str);
+    }
 
+    // If the string passed is NULL and even the copy is NULL, we are done and return NULL.
+    else if (temp == NULL)
+        return NULL;
+
+    // If only the string passed is NULL and the copy still has data, work with it.
+    else {
+        str = temp;
+    }
+
+    int chars = 0, len = strlen(tokens), flag = 0;
+
+    // Run the loop till we find a token or our copy is fully parsed.
+    while (*temp) {
+        for (int i = 0; i < len; i++) {
+            if (*temp == tokens[i]) {
+                if (chars == 0) {
+                    flag = 1;
+                    str++;
+                } else {
+                    temp++;
+                    str[chars] = '\0';
+                    return str;
+                }
+            }
+        }
+        if (flag == 0)
+            chars++;
+        temp++;
+        flag = 0;
+    }
+    temp       = NULL;
+    str[chars] = '\0';
+    return str;
+}
 
 char *MsgHandle::splitPick(const char *msg, const char *delimiter, u8_t n)
 {

@@ -5,6 +5,7 @@
 #include <misc/printk.h>
 #include <zephyr/types.h>
 
+#include "stdlib.h"
 #include "string.h"
 
 class MsgHandle
