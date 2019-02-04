@@ -15,7 +15,7 @@ class MsgManager
 {
    public:
     int handlePrefix(const u8_t *msg, const u8_t *pattern);
-    int subscribe(MsgHandle msgHandle);
+    int subscribe(MsgHandle *msgHandle);
     static MsgManager *instance()
     {
         return &m_instance;

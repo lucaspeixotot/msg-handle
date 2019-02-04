@@ -16,28 +16,13 @@
 #include "ic_version.h"
 #include "tc_msg_manager.hpp"
 
-class LsrvdCommand : public MsgHandle
-{
-   public:
-    LsrvdCommand(const char *key) : MsgHandle(key)
-    {
-    }
-
-    int resolve(const char *content)
-    {
-        return 0;
-    }
-
-   private:
-};
-
 
 void main(void)
 {
     printk("Firmware version: %d.%d.%d\n", version_get_major(), version_get_minor(),
            version_get_build());
-    const u8_t msg[]  = "testing func";
-    const u8_t func[] = "func";
+    const u8_t msg[]  = "CONNECT 0x10 0x1234";
+    const u8_t func[] = "CONNECT";
 
     MsgManager::instance()->handlePrefix(msg, func);
 

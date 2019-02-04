@@ -10,15 +10,19 @@
 class MsgHandle
 {
    public:
-    MsgHandle(const char *key);
+    MsgHandle(const char *prefix, const char *sufix);
     virtual int resolve(const char *content)
     {
         return -EINVAL;
     };
-    const char *key();
+    const char *prefix();
+    const char *findPattern(const char *msg, const char *pattern);
+    char *splitPick(const char *msg, const char *delimiter, u8_t n);
+    char *strtok(char *str, const char *delimiter);
 
    private:
-    const char *m_key;
+    const char *m_prefix;
+    const char *m_sufix;
 };
 
 #endif
