@@ -14,6 +14,7 @@
 #include <zephyr/types.h>
 
 #include "ic_version.h"
+#include "sspconf_handler.hpp"
 #include "tc_msg_manager.hpp"
 
 
@@ -21,9 +22,11 @@ void main(void)
 {
     printk("Firmware version: %d.%d.%d\n", version_get_major(), version_get_minor(),
            version_get_build());
-    const u8_t msg[]  = "CONNECT 0x10 0x1234";
-    const u8_t func[] = "CONNECT";
+    const u8_t msg[]  = "SSPCONF 00802507C08D,t2 794851 ?";
+    const u8_t func[] = "SSPCONF";
+    SSPCONFHandler sspconf(PREFIX, SUFIX);
 
+    // printk("%s\n", sspconf.prefix());
     MsgManager::instance()->handlePrefix(msg, func);
 
     while (1) {

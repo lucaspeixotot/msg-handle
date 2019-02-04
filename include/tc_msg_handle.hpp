@@ -17,13 +17,15 @@ class MsgHandle
         return -EINVAL;
     };
     const char *prefix();
-    const char *findPattern(const char *msg, const char *pattern);
-    char *splitPick(const char *msg, const char *delimiter, u8_t n);
+    char *splitPick(char *msg, const char *delimiter, u8_t n);
     char *strtok(char *str, const char *delimiter);
+    char *payload(const char *msg);
+    int setMsgLength(const char *msg);
 
-   private:
+   protected:
     const char *m_prefix;
     const char *m_sufix;
+    u8_t m_msgLength;
 };
 
 #endif

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.8.2)
 
 set(BOARD nrf52840_pca10056)
+set(Ninja 1)
 include($ENV{ZEPHYR_BASE}/cmake/app/boilerplate.cmake NO_POLICY_SCOPE)
 project(c_code)
 
@@ -28,6 +29,7 @@ list(APPEND SOURCES
     "${PROJECT_SOURCE_DIR}/src/main.cpp"
     "${PROJECT_SOURCE_DIR}/src/tc_msg_manager.cpp"
     "${PROJECT_SOURCE_DIR}/src/tc_msg_handle.cpp"
+    "${PROJECT_SOURCE_DIR}/src/sspconf_handler.cpp"
     )
 
 include_directories(${HEADERS})

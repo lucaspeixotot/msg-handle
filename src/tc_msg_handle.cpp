@@ -1,17 +1,13 @@
 #include "tc_msg_handle.hpp"
 
-MsgHandle::MsgHandle(const char *prefix, const char *sufix) : m_prefix(prefix), m_sufix(sufix)
+MsgHandle::MsgHandle(const char *prefix, const char *sufix)
+    : m_prefix(prefix), m_sufix(sufix), m_msgLength(0)
 {
 }
 
 const char *MsgHandle::prefix()
 {
     return m_prefix;
-}
-
-const char *MsgHandle::findPattern(const char *msg, const char *pattern)
-{
-    return strstr(msg, pattern);
 }
 
 char *MsgHandle::strtok(char *str, const char *tokens)
@@ -60,12 +56,9 @@ char *MsgHandle::strtok(char *str, const char *tokens)
     return str;
 }
 
-char *MsgHandle::splitPick(const char *msg, const char *delimiter, u8_t n)
+char *MsgHandle::splitPick(char *msg, const char *delimiter, u8_t n)
 {
-    char *msgCopy;
-    strcpy(msgCopy, msg);
-
-    char *choice = strtok(msgCopy, delimiter);
+    char *choice = strtok(msg, delimiter);
 
     while (choice != nullptr) {
         n--;
@@ -76,5 +69,29 @@ char *MsgHandle::splitPick(const char *msg, const char *delimiter, u8_t n)
     }
 
     return choice;
+}
+
+int MsgHandle::setMsgLength(const char *msg)
+{
+    const char *endPtr = strstr(msg, m_sufix);
+    if (endPtr == nullptr) {
+        return -EINVAL;
+    }
+    m_msgLength = (u8_t)(endPtr - msg);
+    return 0;
+}
+
+char *MsgHandle::payload(const char *msg)
+{
+    int err = setMsgLength(msg);
+
+    if (err) {
+        return nullptr;
+    }
+
+    char content[m_msgLength];
+    strncpy(content, msg, m_msgLength);
+    content[m_msgLength] = '\0';
+    return content;
 }
 
