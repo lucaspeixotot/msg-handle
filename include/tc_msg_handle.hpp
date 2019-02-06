@@ -2,6 +2,7 @@
 #define _TC_MSG_HANDLE_HPP_
 
 #include <errno.h>
+#include <logging/log.h>
 #include <misc/printk.h>
 #include <zephyr/types.h>
 
@@ -19,12 +20,14 @@ class MsgHandle
     const char *prefix();
     char *splitPick(char *msg, const char *delimiter, u8_t n);
     char *strtok(char *str, const char *delimiter);
-    char *payload(const char *msg);
+    void payload(const char *msg);
     int setMsgLength(const char *msg);
 
    protected:
     const char *m_prefix;
     const char *m_sufix;
+    char m_content[50];
+    char *m_temp;
     u8_t m_msgLength;
 };
 

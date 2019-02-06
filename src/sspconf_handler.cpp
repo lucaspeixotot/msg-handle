@@ -6,6 +6,9 @@ SSPCONFHandler::SSPCONFHandler(const char *prefix, const char *sufix) : MsgHandl
 
 int SSPCONFHandler::resolve(const char *content)
 {
-    printk("Resolvendo %s\n", content);
+    payload(content);
+    printk("payload: %s\n", m_content);
+    char *pass = splitPick(m_content, " ", 2);
+    printk("pass: %s\n", pass);
     return 0;
 }

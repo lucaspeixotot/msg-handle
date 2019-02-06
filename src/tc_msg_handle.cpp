@@ -3,6 +3,7 @@
 MsgHandle::MsgHandle(const char *prefix, const char *sufix)
     : m_prefix(prefix), m_sufix(sufix), m_msgLength(0)
 {
+    m_temp = nullptr;
 }
 
 const char *MsgHandle::prefix()
@@ -12,48 +13,59 @@ const char *MsgHandle::prefix()
 
 char *MsgHandle::strtok(char *str, const char *tokens)
 {
-    // Making a static string to be used again on next function call.
-    static char *temp;
+    int i   = 0;
+    int len = strlen(tokens);
 
-    // If string passed to function is not null, copy it to our static variable
-    if (str != NULL) {
-        temp = (char *) malloc(strlen(str));
-        strcpy(temp, str);
-    }
+    /* check in the tokens */
+    if (len == 0)
+        printk("tokens are empty\n");
 
-    // If the string passed is NULL and even the copy is NULL, we are done and return NULL.
-    else if (temp == NULL)
+    /* if the original string has nothing left */
+    if (!str && !m_temp)
         return NULL;
 
-    // If only the string passed is NULL and the copy still has data, work with it.
-    else {
-        str = temp;
-    }
+    /* initialize the m_temp during the first call */
+    if (str && !m_temp)
+        m_temp = str;
 
-    int chars = 0, len = strlen(tokens), flag = 0;
-
-    // Run the loop till we find a token or our copy is fully parsed.
-    while (*temp) {
-        for (int i = 0; i < len; i++) {
-            if (*temp == tokens[i]) {
-                if (chars == 0) {
-                    flag = 1;
-                    str++;
-                } else {
-                    temp++;
-                    str[chars] = '\0';
-                    return str;
-                }
+    /* find the start of the substring, skip tokens */
+    char *p_start = m_temp;
+    while (true) {
+        for (i = 0; i < len; i++) {
+            if (*p_start == tokens[i]) {
+                p_start++;
+                break;
             }
         }
-        if (flag == 0)
-            chars++;
-        temp++;
-        flag = 0;
+
+        if (i == len) {
+            m_temp = p_start;
+            break;
+        }
     }
-    temp       = NULL;
-    str[chars] = '\0';
-    return str;
+
+    /* return NULL if nothing left */
+    if (*m_temp == '\0') {
+        m_temp = NULL;
+        return m_temp;
+    }
+
+    /* find the end of the substring, and
+        replace the delimiter with null */
+    while (*m_temp != '\0') {
+        for (i = 0; i < len; i++) {
+            if (*m_temp == tokens[i]) {
+                *m_temp = '\0';
+                break;
+            }
+        }
+
+        m_temp++;
+        if (i < len)
+            break;
+    }
+
+    return p_start;
 }
 
 char *MsgHandle::splitPick(char *msg, const char *delimiter, u8_t n)
@@ -81,17 +93,16 @@ int MsgHandle::setMsgLength(const char *msg)
     return 0;
 }
 
-char *MsgHandle::payload(const char *msg)
+void MsgHandle::payload(const char *msg)
 {
     int err = setMsgLength(msg);
 
     if (err) {
-        return nullptr;
+        return;
     }
 
-    char content[m_msgLength];
-    strncpy(content, msg, m_msgLength);
-    content[m_msgLength] = '\0';
-    return content;
+    // char content[m_msgLength];
+    strncpy(m_content, msg, m_msgLength);
+    m_content[m_msgLength] = '\0';
 }
 

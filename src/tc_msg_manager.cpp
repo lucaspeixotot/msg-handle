@@ -50,4 +50,3 @@ int MsgManager::handlePrefix(const u8_t *msg, const u8_t *pattern)
     }
     return err;
 }
-

@@ -10,7 +10,7 @@
 #define PREFIX "SSPCONF"
 #define SUFIX "\n"
 
-class SSPCONFHandler : Public MsgHandle
+class SSPCONFHandler : public MsgHandle
 {
    public:
     SSPCONFHandler(const char *prefix, const char *sufix);
