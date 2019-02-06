@@ -4,11 +4,14 @@ SSPCONFHandler::SSPCONFHandler(const char *prefix, const char *sufix) : MsgHandl
 {
 }
 
-int SSPCONFHandler::resolve(const char *content)
+int SSPCONFHandler::resolve(char *body)
 {
-    payload(content);
-    printk("payload: %s\n", m_content);
-    char *pass = splitPick(m_content, " ", 2);
+    char pass[50];
+    printk("VOU COPIAR");
+    strcpy(pass, body);
+    printk("COPIEI\n");
+    printk("pass: %s\n", pass);
+    splitPick(pass, " ", 3);
     printk("pass: %s\n", pass);
     return 0;
 }

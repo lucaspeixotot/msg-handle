@@ -13,14 +13,15 @@ class MsgHandle
 {
    public:
     MsgHandle(const char *prefix, const char *sufix);
-    virtual int resolve(const char *content)
+    virtual int resolve(char *content)
     {
         return -EINVAL;
     };
     const char *prefix();
+    const char *sufix();
     char *splitPick(char *msg, const char *delimiter, u8_t n);
     char *strtok(char *str, const char *delimiter);
-    void payload(const char *msg);
+    void payload(char *msg);
     int setMsgLength(const char *msg);
 
    protected:

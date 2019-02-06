@@ -7,14 +7,14 @@
 
 #include "tc_msg_handle.hpp"
 
-#define PREFIX "SSPCONF"
-#define SUFIX "\n"
+#define SSPCONF_PREFIX "SSPCONF"
+#define SSPCONF_SUFIX "OK"
 
 class SSPCONFHandler : public MsgHandle
 {
    public:
     SSPCONFHandler(const char *prefix, const char *sufix);
-    int resolve(const char *content);
+    int resolve(char *body);
 
    protected:
     u8_t m_test;

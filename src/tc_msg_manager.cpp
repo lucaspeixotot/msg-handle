@@ -31,22 +31,78 @@ int MsgManager::subscribe(MsgHandle *msgHandle)
 
 int MsgManager::handlePrefix(const u8_t *msg, const u8_t *pattern)
 {
-    int err             = 0;
-    const char *m       = (const char *) msg;
-    const char *p       = (const char *) pattern;
-    const char *content = strstr(m, p);
+    int err = 0;
+    // const char *m       = (const char *) msg;
+    // const char *p       = (const char *) pattern;
+    // const char *content = strstr(m, p);
 
-    if (content == nullptr) {
-        return 0;
-    }
+    // if (content == nullptr) {
+    // return 0;
+    //}
 
-    content = content + strlen(p);
+    // content = content + strlen(p);
 
-    for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
-        if (m_handles[i] != nullptr && !strcmp(p, m_handles[i]->prefix())) {
-            err = m_handles[i]->resolve(content);
-            break;
+    // for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
+    // if (m_handles[i] != nullptr && !strcmp(p, m_handles[i]->prefix())) {
+    // err = m_handles[i]->resolve(content);
+    // break;
+    //}
+    //}
+    return err;
+}
+
+void MsgManager::receiveByte(char byte)
+{
+    printk("%c\n", byte);
+    if (m_state == NO_MESSAGE) {
+        printk("TO BUSCANDO UMA MSG NOVA\n");
+        for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
+            if (m_handles[i] == nullptr) {
+                break;
+            }
+            if (m_handles[i]->prefix()[0] == byte) {
+                m_state = READING_PREFIX;
+                m_i     = 1;
+            }
+        }
+    } else if (m_state == READING_PREFIX) {
+        printk("LENDO O PREFIXOOO\n");
+        u8_t msgBroken = -1;
+        for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
+            if (m_handles[i] == nullptr) {
+                break;
+            }
+            if (m_handles[i]->prefix()[m_i] == byte) {
+                msgBroken = 0;
+                m_i++;
+                if (m_i == strlen(m_handles[i]->prefix())) {
+                    m_handleIndex = i;
+                    m_i           = 0;
+                    m_state       = READING_BODY;
+                }
+                break;
+            }
+        }
+        if (msgBroken) {
+            printk("PREFIX QUENRADO\n");
+            m_state = NO_MESSAGE;
+        }
+    } else if (m_state == READING_BODY) {
+        printk("LENDO O CORPO\n");
+        if (m_handles[m_handleIndex]->sufix()[0] == byte) {
+            m_i     = 1;
+            m_state = READING_SUFIX;
+            return;
+        }
+        msg[m_i++] = byte;
+    } else if (m_state == READING_SUFIX) {
+        printk("OLHA EU LENDO O SUFIXO AKODA\n");
+        if (m_handles[m_handleIndex]->sufix()[m_i++] != byte) {
+            m_state = NO_MESSAGE;
+        }
+        if (m_i == strlen(m_handles[m_handleIndex]->sufix())) {
+            m_handles[m_handleIndex]->resolve(msg);
+            m_state = NO_MESSAGE;
         }
     }
-    return err;
 }

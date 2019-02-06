@@ -47,13 +47,13 @@ void main(void)
 {
     printk("Firmware version: %d.%d.%d\n", version_get_major(), version_get_minor(),
            version_get_build());
-    const u8_t msg[]  = "SSPCONF 00802507C08D,t2 794851 ?\n";
+    const u8_t msg[]  = "SSPCONF 00802507C08D,t2 794851 ?OK";
     const u8_t func[] = "SSPCONF";
-    SSPCONFHandler sspconf(PREFIX, SUFIX);
+    SSPCONFHandler sspconf(SSPCONF_PREFIX, SSPCONF_SUFIX);
 
     // printk("%s\n", sspconf.prefix());
     MsgManager::instance()->subscribe(&sspconf);
-    MsgManager::instance()->handlePrefix(msg, func);
+    // MsgManager::instance()->handlePrefix(msg, func);
     struct device uart_dev;
     initUart(&uart_dev);
 

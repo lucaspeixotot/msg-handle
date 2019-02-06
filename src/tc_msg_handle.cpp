@@ -11,6 +11,11 @@ const char *MsgHandle::prefix()
     return m_prefix;
 }
 
+const char *MsgHandle::sufix()
+{
+    return m_sufix;
+}
+
 char *MsgHandle::strtok(char *str, const char *tokens)
 {
     int i   = 0;
@@ -93,16 +98,16 @@ int MsgHandle::setMsgLength(const char *msg)
     return 0;
 }
 
-void MsgHandle::payload(const char *msg)
+void MsgHandle::payload(char *body)
 {
-    int err = setMsgLength(msg);
+    int err = setMsgLength(body);
 
     if (err) {
         return;
     }
 
     // char content[m_msgLength];
-    strncpy(m_content, msg, m_msgLength);
+    strncpy(m_content, body, m_msgLength);
     m_content[m_msgLength] = '\0';
 }
 
