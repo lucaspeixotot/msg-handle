@@ -6,12 +6,10 @@ SSPCONFHandler::SSPCONFHandler(const char *prefix, const char *sufix) : MsgHandl
 
 int SSPCONFHandler::resolve(char *body)
 {
-    char pass[50];
-    printk("VOU COPIAR");
-    strcpy(pass, body);
-    printk("COPIEI\n");
-    printk("pass: %s\n", pass);
-    splitPick(pass, " ", 3);
-    printk("pass: %s\n", pass);
+    char bodyCopy[50];
+    strcpy(bodyCopy, body);
+    printk("body: %s\n", bodyCopy);
+    char *pass = splitPick(bodyCopy, " ", 2);
+    printk("password: %s\n", pass);
     return 0;
 }

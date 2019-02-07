@@ -55,18 +55,19 @@ void MsgManager::receiveByte(char byte)
 {
     printk("%c\n", byte);
     if (m_state == NO_MESSAGE) {
-        printk("TO BUSCANDO UMA MSG NOVA\n");
+        printk("-NO_MESSAGE\n");
         for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
             if (m_handles[i] == nullptr) {
                 break;
             }
             if (m_handles[i]->prefix()[0] == byte) {
+                printk("POSSIBLE PREFIX\n");
                 m_state = READING_PREFIX;
                 m_i     = 1;
             }
         }
     } else if (m_state == READING_PREFIX) {
-        printk("LENDO O PREFIXOOO\n");
+        printk("-READING_PREFIX\n");
         u8_t msgBroken = -1;
         for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
             if (m_handles[i] == nullptr) {
@@ -84,11 +85,11 @@ void MsgManager::receiveByte(char byte)
             }
         }
         if (msgBroken) {
-            printk("PREFIX QUENRADO\n");
+            printk("PREFIX BROKEN\n");
             m_state = NO_MESSAGE;
         }
     } else if (m_state == READING_BODY) {
-        printk("LENDO O CORPO\n");
+        printk("-READING_BODY\n");
         if (m_handles[m_handleIndex]->sufix()[0] == byte) {
             m_i     = 1;
             m_state = READING_SUFIX;
@@ -96,7 +97,7 @@ void MsgManager::receiveByte(char byte)
         }
         msg[m_i++] = byte;
     } else if (m_state == READING_SUFIX) {
-        printk("OLHA EU LENDO O SUFIXO AKODA\n");
+        printk("-READING_PREFIX\n");
         if (m_handles[m_handleIndex]->sufix()[m_i++] != byte) {
             m_state = NO_MESSAGE;
         }

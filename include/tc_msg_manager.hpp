@@ -3,7 +3,6 @@
 
 // Includes
 #include <misc/printk.h>
-#include <uart.h>
 #include <zephyr/types.h>
 
 #include "string.h"
