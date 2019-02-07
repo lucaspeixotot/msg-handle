@@ -15,9 +15,9 @@ EventCommand::EventCommand(const char *prefix, const char *sufix, const char *in
 int EventCommand::mountBody(char byte)
 {
     LOG_DBG("Mounting the body");
-    if (!m_currentChar) {
+    if (m_currentChar == -1) {
         if (byte == m_initBody[0]) {
-            m_argv[m_currentArg++] = m_body;
+            m_currentArg++;
             m_currentChar++;
             LOG_DBG("Receiving the first byte");
             return 0;
@@ -33,6 +33,7 @@ int EventCommand::mountBody(char byte)
         }
         m_body[m_currentChar] = '\0';
         LOG_DBG("End of message, let's resolve it");
+        m_argv[0] = (m_body + 0);
         resolve();
         resetRead();
         return END_MSG;

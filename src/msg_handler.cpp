@@ -9,7 +9,7 @@ MsgHandler::MsgHandler(const char *prefix, const char *sufix) : m_prefix(prefix)
 
 void MsgHandler::resetRead()
 {
-    m_currentChar = 0;
+    m_currentChar = -1;
     m_currentArg  = 0;
 }
 

@@ -10,14 +10,8 @@ SSPCONFHandler::SSPCONFHandler(const char *prefix, const char *sufix, const char
 
 int SSPCONFHandler::resolve()
 {
-    // char bodyCopy[50];
-    // strcpy(bodyCopy, body);
-    // printk("body: %s\n", bodyCopy);
-    // char *pass = splitPick(bodyCopy, " ", 2);
-    // printk("password: %s\n", pass);
     LOG_DBG("The 1 argument is: %s", m_argv[0]);
     LOG_DBG("The 2 argument is: %s", m_argv[1]);
     LOG_DBG("The 3 argument is: %s", m_argv[2]);
-    LOG_DBG("The 3 argument is: %s", m_argv[3]);
     return 0;
 }
