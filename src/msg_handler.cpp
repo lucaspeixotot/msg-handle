@@ -1,8 +1,16 @@
-#include "msg_handle.h"
+#include "msg_handler.h"
 
 MsgHandler::MsgHandler(const char *prefix, const char *sufix) : m_prefix(prefix), m_sufix(sufix)
 {
     m_temp = nullptr;
+    resetRead();
+}
+
+
+void MsgHandler::resetRead()
+{
+    m_currentChar = 0;
+    m_currentArg  = 0;
 }
 
 const char *MsgHandler::prefix()

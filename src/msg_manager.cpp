@@ -4,9 +4,9 @@ LOG_MODULE_REGISTER(msg_manager, 4);
 
 MsgManager MsgManager::m_instance = MsgManager();
 
-int MsgManager::subscribe(MsgHandle *msgHandle)
+int MsgManager::subscribe(MsgHandler *msgHandler)
 {
-    if (msgHandle == nullptr) {
+    if (msgHandler == nullptr) {
         return -EINVAL;
     }
     u8_t available          = 1;
@@ -14,7 +14,7 @@ int MsgManager::subscribe(MsgHandle *msgHandle)
 
     for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
         if (m_handles[i] != nullptr) {
-            if (!strcmp(m_handles[i]->prefix(), msgHandle->prefix())) {
+            if (!strcmp(m_handles[i]->prefix(), msgHandler->prefix())) {
                 available = 0;
             }
         }
@@ -25,8 +25,8 @@ int MsgManager::subscribe(MsgHandle *msgHandle)
     }
 
     if (available) {
-        LOG_INF("A new handler with prefix \"%s\" was added.", msgHandle->prefix());
-        m_handles[nextIndexAvailable] = msgHandle;
+        LOG_INF("A new handler with prefix \"%s\" was added.", msgHandler->prefix());
+        m_handles[nextIndexAvailable] = msgHandler;
     }
 
     return 0;
@@ -70,6 +70,7 @@ void MsgManager::receiveByte(char byte)
         }
     } else if (m_state == READING_BODY) {
         if (m_handles[m_handleIndex]->mountBody(byte)) {
+            LOG_DBG("State: NO_MESSAGE");
             m_state = NO_MESSAGE;
         }
     }

@@ -5,17 +5,17 @@
 #include <misc/printk.h>
 #include <zephyr/types.h>
 
-#include "msg_handle.h"
+#include "event_command.h"
 
 #define SSPCONF_PREFIX "SSPCONF"
-#define SSPCONF_SUFIX "OK"
+#define SSPCONF_SUFIX "\r"
 
-class SSPCONFHandler : public MsgHandle
+class SSPCONFHandler : public EventCommand
 {
    public:
-    SSPCONFHandler(const char *prefix, const char *sufix);
-    int resolve(char *body);
-    int mountBody(char byte);
+    SSPCONFHandler(const char *prefix, const char *sufix, const char *init_body,
+                   const char *delimiter, u8_t argc);
+    int resolve();
 
    protected:
     u8_t m_test;

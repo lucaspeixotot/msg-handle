@@ -28,8 +28,9 @@ list(APPEND SOURCES
     "${PROJECT_SOURCE_DIR}/src/main.cpp"
     "${PROJECT_SOURCE_DIR}/src/firmware_version.cpp"
     "${PROJECT_SOURCE_DIR}/src/msg_manager.cpp"
-    "${PROJECT_SOURCE_DIR}/src/msg_handle.cpp"
+    "${PROJECT_SOURCE_DIR}/src/msg_handler.cpp"
     "${PROJECT_SOURCE_DIR}/src/sspconf_handler.cpp"
+    "${PROJECT_SOURCE_DIR}/src/event_command.cpp"
     )
 
 include_directories(${HEADERS})

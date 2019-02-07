@@ -1,20 +1,23 @@
 #include "sspconf_handler.h"
 
-SSPCONFHandler::SSPCONFHandler(const char *prefix, const char *sufix) : MsgHandle(prefix, sufix)
+LOG_MODULE_REGISTER(sspconf_handler, 4);
+
+SSPCONFHandler::SSPCONFHandler(const char *prefix, const char *sufix, const char *init_body,
+                               const char *delimiter, u8_t argc)
+    : EventCommand(prefix, sufix, init_body, delimiter, argc)
 {
 }
 
-int SSPCONFHandler::resolve(char *body)
+int SSPCONFHandler::resolve()
 {
-    char bodyCopy[50];
-    strcpy(bodyCopy, body);
-    printk("body: %s\n", bodyCopy);
-    char *pass = splitPick(bodyCopy, " ", 2);
-    printk("password: %s\n", pass);
+    // char bodyCopy[50];
+    // strcpy(bodyCopy, body);
+    // printk("body: %s\n", bodyCopy);
+    // char *pass = splitPick(bodyCopy, " ", 2);
+    // printk("password: %s\n", pass);
+    LOG_DBG("The 1 argument is: %s", m_argv[0]);
+    LOG_DBG("The 2 argument is: %s", m_argv[1]);
+    LOG_DBG("The 3 argument is: %s", m_argv[2]);
+    LOG_DBG("The 3 argument is: %s", m_argv[3]);
     return 0;
-}
-
-int SSPCONFHandler::mountBody(char byte)
-{
-    printk("hahahaha-> %c\n", byte);
 }

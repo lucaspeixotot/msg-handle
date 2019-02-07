@@ -3,8 +3,24 @@
 
 #include "msg_handler.h"
 
-class GeneralCommand : public MsgHandler
+#define END_MSG 1
+
+class EventCommand : public MsgHandler
 {
+   public:
+    EventCommand(const char *prefix, const char *sufix, const char *initBody, const char *delimiter,
+                 u8_t argc);
+    int mountBody(char byte);
+    virtual int resolve()
+    {
+        return -EINVAL;
+    }
+
+   protected:
+    const char *m_delimiter;
+    const char *m_initBody;
+    char *m_argv[10];
+    u8_t m_argc;
 };
 
 #endif

@@ -9,11 +9,13 @@
 #include "stdlib.h"
 #include "string.h"
 
-class MsgHandle
+#define MAX_BODY_LENGTH 80
+
+class MsgHandler
 {
    public:
-    MsgHandle(const char *prefix, const char *sufix);
-    virtual int resolve(char *content)
+    MsgHandler(const char *prefix, const char *sufix);
+    virtual int resolve()
     {
         return -EINVAL;
     };
@@ -26,8 +28,12 @@ class MsgHandle
    protected:
     const char *m_prefix;
     const char *m_sufix;
-    char m_body[100];
+    u8_t m_currentChar;
+    u8_t m_currentArg;
+    char m_body[MAX_BODY_LENGTH];
     char *m_temp;
+
+    void resetRead();
 };
 
 #endif

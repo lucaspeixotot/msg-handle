@@ -16,6 +16,12 @@
 #include "msg_manager.h"
 #include "sspconf_handler.h"
 
+// uart
+#include <misc/byteorder.h>
+#include <stdio.h>
+#include <uart.h>
+#include <zephyr.h>
+
 LOG_MODULE_REGISTER(main, 4);
 
 void uart_callback(struct device *uart_dev)
@@ -52,7 +58,7 @@ void main(void)
 {
     LOG_WRN("Firmware version: %d.%d.%d\n", version_get_major(), version_get_minor(),
             version_get_build());
-    SSPCONFHandler sspconf(SSPCONF_PREFIX, SSPCONF_SUFIX);
+    SSPCONFHandler sspconf(SSPCONF_PREFIX, SSPCONF_SUFIX, " ", " ", 3);
 
     MsgManager::instance()->subscribe(&sspconf);
     struct device uart_dev;
