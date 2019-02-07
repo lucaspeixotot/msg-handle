@@ -1,4 +1,6 @@
-#include "tc_msg_manager.hpp"
+#include "msg_manager.h"
+
+LOG_MODULE_REGISTER(msg_manager, 4);
 
 MsgManager MsgManager::m_instance = MsgManager();
 
@@ -23,51 +25,28 @@ int MsgManager::subscribe(MsgHandle *msgHandle)
     }
 
     if (available) {
+        LOG_INF("A new handler with prefix \"%s\" was added.", msgHandle->prefix());
         m_handles[nextIndexAvailable] = msgHandle;
     }
 
     return 0;
 }
 
-int MsgManager::handlePrefix(const u8_t *msg, const u8_t *pattern)
-{
-    int err = 0;
-    // const char *m       = (const char *) msg;
-    // const char *p       = (const char *) pattern;
-    // const char *content = strstr(m, p);
-
-    // if (content == nullptr) {
-    // return 0;
-    //}
-
-    // content = content + strlen(p);
-
-    // for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
-    // if (m_handles[i] != nullptr && !strcmp(p, m_handles[i]->prefix())) {
-    // err = m_handles[i]->resolve(content);
-    // break;
-    //}
-    //}
-    return err;
-}
-
 void MsgManager::receiveByte(char byte)
 {
-    printk("%c\n", byte);
+    LOG_DBG("Byte received: %c", byte);
     if (m_state == NO_MESSAGE) {
-        printk("-NO_MESSAGE\n");
         for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
             if (m_handles[i] == nullptr) {
                 break;
             }
             if (m_handles[i]->prefix()[0] == byte) {
-                printk("POSSIBLE PREFIX\n");
+                LOG_DBG("State: READING_PREFIX");
                 m_state = READING_PREFIX;
                 m_i     = 1;
             }
         }
     } else if (m_state == READING_PREFIX) {
-        printk("-READING_PREFIX\n");
         u8_t msgBroken = -1;
         for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
             if (m_handles[i] == nullptr) {
@@ -77,6 +56,7 @@ void MsgManager::receiveByte(char byte)
                 msgBroken = 0;
                 m_i++;
                 if (m_i == strlen(m_handles[i]->prefix())) {
+                    LOG_DBG("State: READING_BODY");
                     m_handleIndex = i;
                     m_i           = 0;
                     m_state       = READING_BODY;
@@ -85,24 +65,11 @@ void MsgManager::receiveByte(char byte)
             }
         }
         if (msgBroken) {
-            printk("PREFIX BROKEN\n");
+            LOG_DBG("State: NO_MESSAGE");
             m_state = NO_MESSAGE;
         }
     } else if (m_state == READING_BODY) {
-        printk("-READING_BODY\n");
-        if (m_handles[m_handleIndex]->sufix()[0] == byte) {
-            m_i     = 1;
-            m_state = READING_SUFIX;
-            return;
-        }
-        msg[m_i++] = byte;
-    } else if (m_state == READING_SUFIX) {
-        printk("-READING_PREFIX\n");
-        if (m_handles[m_handleIndex]->sufix()[m_i++] != byte) {
-            m_state = NO_MESSAGE;
-        }
-        if (m_i == strlen(m_handles[m_handleIndex]->sufix())) {
-            m_handles[m_handleIndex]->resolve(msg);
+        if (m_handles[m_handleIndex]->mountBody(byte)) {
             m_state = NO_MESSAGE;
         }
     }

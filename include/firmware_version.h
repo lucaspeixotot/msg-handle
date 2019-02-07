@@ -13,7 +13,8 @@
 
 #include <zephyr/types.h>
 
-#include "firmware_version.h"
+#include "current_version.h"
+
 
 typedef struct {
     u8_t major;

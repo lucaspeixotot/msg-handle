@@ -25,10 +25,10 @@ list(APPEND HEADERS
     )
 
 list(APPEND SOURCES
-    "${PROJECT_SOURCE_DIR}/src/ic_version.cpp"
     "${PROJECT_SOURCE_DIR}/src/main.cpp"
-    "${PROJECT_SOURCE_DIR}/src/tc_msg_manager.cpp"
-    "${PROJECT_SOURCE_DIR}/src/tc_msg_handle.cpp"
+    "${PROJECT_SOURCE_DIR}/src/firmware_version.cpp"
+    "${PROJECT_SOURCE_DIR}/src/msg_manager.cpp"
+    "${PROJECT_SOURCE_DIR}/src/msg_handle.cpp"
     "${PROJECT_SOURCE_DIR}/src/sspconf_handler.cpp"
     )
 

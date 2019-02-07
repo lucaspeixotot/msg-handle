@@ -1,12 +1,12 @@
-#ifndef _TC_MSG_MANAGER_HPP_
-#define _TC_MSG_MANAGER_HPP_
+#ifndef _MSG_MANAGER_H_
+#define _MSG_MANAGER_H_
 
 // Includes
 #include <misc/printk.h>
 #include <zephyr/types.h>
 
+#include "msg_handle.h"
 #include "string.h"
-#include "tc_msg_handle.hpp"
 
 // uart
 #include <misc/byteorder.h>
@@ -22,7 +22,6 @@ enum state { NO_MESSAGE, READING_PREFIX, READING_BODY, READING_SUFIX };
 class MsgManager
 {
    public:
-    int handlePrefix(const u8_t *msg, const u8_t *pattern);
     int subscribe(MsgHandle *msgHandle);
     void receiveByte(char byte);
     static MsgManager *instance()
