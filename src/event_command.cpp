@@ -1,13 +1,12 @@
 #include "event_command.h"
 
 
-LOG_MODULE_REGISTER(event_command, 4);
+LOG_MODULE_REGISTER(event_command, 2);
 
 EventCommand::EventCommand(const char *prefix, const char *sufix, const char *initBody,
                            const char *delimiter, u8_t argc)
     : MsgHandler(prefix, sufix), m_delimiter(delimiter), m_initBody(initBody), m_argc(argc)
 {
-    // m_argv = (char **) malloc(argc);
     resetRead();
 }
 
@@ -15,24 +14,26 @@ EventCommand::EventCommand(const char *prefix, const char *sufix, const char *in
 int EventCommand::mountBody(char byte)
 {
     LOG_DBG("Mounting the body");
-    if (m_currentChar == -1) {
+    LOG_DBG("%d", m_currentChar);
+    if (m_currentChar == 255) {
         if (byte == m_initBody[0]) {
             m_currentArg++;
             m_currentChar++;
             LOG_DBG("Receiving the first byte");
             return 0;
         }
+        LOG_INF("The message is broken, discarding it");
         return -EINVAL;
     }
 
     if (byte == m_sufix[0]) {
         if (m_currentArg != m_argc) {
-            LOG_DBG("The message is broken, discarding it");
+            LOG_INF("The message is broken, discarding it");
             resetRead();
             return -EINVAL;
         }
         m_body[m_currentChar] = '\0';
-        LOG_DBG("End of message, let's resolve it");
+        LOG_INF("The message was readed successfuly");
         m_argv[0] = (m_body + 0);
         resolve();
         resetRead();

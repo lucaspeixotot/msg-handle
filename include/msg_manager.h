@@ -19,6 +19,7 @@ class MsgManager
    public:
     int subscribe(MsgHandler *msgHandler);
     void receiveByte(char byte);
+    void resetCandidates();
     static MsgManager *instance()
     {
         return &m_instance;
@@ -37,6 +38,7 @@ class MsgManager
     state m_state;
     u8_t m_i;
     u8_t m_handleIndex;
+    u8_t m_candidates[MAX_MSG_HANDLES];
     MsgHandler *m_handles[MAX_MSG_HANDLES];
 };
 

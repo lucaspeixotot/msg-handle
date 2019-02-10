@@ -54,13 +54,53 @@ void initUart(struct device *uart_dev)
     uart_irq_rx_enable(uart_dev);
 }
 
+class SsppinHandler : public EventCommand
+{
+   public:
+    SsppinHandler(const char *prefix, const char *sufix, const char *init_body,
+                  const char *delimiter, u8_t argc)
+        : EventCommand(prefix, sufix, init_body, delimiter, argc)
+    {
+    }
+    int resolve()
+    {
+        LOG_DBG("The 1 argument from ssppin handler is: %s", m_argv[0]);
+        LOG_DBG("The 2 argument from ssppin handler is: %s", m_argv[1]);
+        return 0;
+    }
+
+   protected:
+};
+
+class LeattmtuHandler : public EventCommand
+{
+   public:
+    LeattmtuHandler(const char *prefix, const char *sufix, const char *init_body,
+                    const char *delimiter, u8_t argc)
+        : EventCommand(prefix, sufix, init_body, delimiter, argc)
+    {
+    }
+    int resolve()
+    {
+        LOG_DBG("The 1 argument from leattmtu handler is: %s", m_argv[0]);
+        LOG_DBG("The 2 argument from leattmtu handler is: %s", m_argv[1]);
+        return 0;
+    }
+
+   protected:
+};
+
 void main(void)
 {
     LOG_WRN("Firmware version: %d.%d.%d\n", version_get_major(), version_get_minor(),
             version_get_build());
     SSPCONFHandler sspconf(SSPCONF_PREFIX, SSPCONF_SUFIX, " ", " ", 3);
+    LeattmtuHandler leattmtu("LEATTMTU", "\r", ":", ",", 2);
+    SsppinHandler ssppin("SSPPIN", "\r", " ", " ", 2);
 
     MsgManager::instance()->subscribe(&sspconf);
+    MsgManager::instance()->subscribe(&leattmtu);
+    MsgManager::instance()->subscribe(&ssppin);
     struct device uart_dev;
     initUart(&uart_dev);
 
