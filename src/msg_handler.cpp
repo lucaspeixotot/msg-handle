@@ -1,7 +1,17 @@
 #include "msg_handler.h"
 
-MsgHandler::MsgHandler(const char *prefix, const char *sufix) : m_prefix(prefix), m_sufix(sufix)
+LOG_MODULE_REGISTER(msg_handler, 4);
+
+MsgHandler::MsgHandler(const char *prefix, const char *sufix, struct k_mem_pool *memoryPool,
+                       u8_t bodyLength)
+    : m_prefix(prefix), m_sufix(sufix)
 {
+    m_body = (char *) k_mem_pool_malloc(memoryPool, bodyLength);
+    if (!m_body) {
+        LOG_ERR(
+            "Error allocating memory to the msg handler named %s, there is no %d bytes available",
+            prefix, bodyLength);
+    }
     m_temp = nullptr;
     resetRead();
 }

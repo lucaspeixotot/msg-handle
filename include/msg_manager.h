@@ -10,16 +10,19 @@
 
 
 // Defines
-#define MAX_MSG_HANDLES 10
+#define MAX_MSG_HANDLES 16
 
-enum state { NO_MESSAGE, READING_PREFIX, READING_BODY, READING_SUFIX };
+enum state { NO_MESSAGE, READING_PREFIX, READING_BODY };
+enum event { MATCH, NOT_MATCH, PREFIX_COMPLETE, BODY_OK, BODY_BROKEN, NULL_EVENT };
 
 class MsgManager
 {
    public:
     int subscribe(MsgHandler *msgHandler);
     void receiveByte(char byte);
+    void nextState(event e);
     void resetCandidates();
+    char upperCase(char byte);
     static MsgManager *instance()
     {
         return &m_instance;

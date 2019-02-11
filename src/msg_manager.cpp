@@ -33,23 +33,57 @@ int MsgManager::subscribe(MsgHandler *msgHandler)
     return 0;
 }
 
+void MsgManager::nextState(event e)
+{
+    switch (m_state) {
+    case NO_MESSAGE:
+        if (e == MATCH) {
+            LOG_INF("State: READING_PREFIX");
+            m_state = READING_PREFIX;
+            m_i     = 1;
+        }
+        break;
+    case READING_PREFIX:
+        if (e == NOT_MATCH) {
+            LOG_INF("State: NO_MESSAGE");
+            m_state = NO_MESSAGE;
+        } else if (e == PREFIX_COMPLETE) {
+            LOG_INF("State: READING_BODY");
+            m_i     = 0;
+            m_state = READING_BODY;
+        }
+        break;
+    case READING_BODY:
+        if (e == BODY_BROKEN) {
+            LOG_INF("State: NO_MESSAGE");
+            resetCandidates();
+            m_state = NO_MESSAGE;
+        }
+        break;
+    default:
+        break;
+    };
+}
+
 void MsgManager::receiveByte(char byte)
 {
     LOG_DBG("Byte received: %c", byte);
+    event e = NULL_EVENT;
     if (m_state == NO_MESSAGE) {
+        e    = NOT_MATCH;
+        byte = upperCase(byte);
         for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
             if (m_handles[i] == nullptr) {
                 break;
             }
             if (m_handles[i]->prefix()[0] == byte) {
-                LOG_INF("State: READING_PREFIX");
                 m_candidates[i] = 1;
-                m_state         = READING_PREFIX;
-                m_i             = 1;
+                e               = MATCH;
             }
         }
     } else if (m_state == READING_PREFIX) {
-        u8_t msgBroken = 255;
+        e    = NOT_MATCH;
+        byte = upperCase(byte);
         for (u8_t i = 0; i < MAX_MSG_HANDLES; i++) {
             if (m_handles[i] == nullptr) {
                 break;
@@ -57,13 +91,11 @@ void MsgManager::receiveByte(char byte)
             if (m_candidates[i]) {
                 if (m_handles[i]->prefix()[m_i] == byte) {
                     LOG_DBG("%s continues", m_handles[i]->prefix());
-                    msgBroken = 0;
+                    e = MATCH;
                     if (m_i == strlen(m_handles[i]->prefix()) - 1) {
-                        LOG_INF("State: READING_BODY");
+                        e             = PREFIX_COMPLETE;
                         m_handleIndex = i;
-                        m_i           = 0;
-                        m_state       = READING_BODY;
-                        return;
+                        break;
                     }
                 } else {
                     m_candidates[i] = 0;
@@ -72,19 +104,14 @@ void MsgManager::receiveByte(char byte)
                 }
             }
         }
-        if (msgBroken) {
-            LOG_INF("State: NO_MESSAGE");
-            m_state = NO_MESSAGE;
-        } else {
-            m_i++;
-        }
+        m_i++;
     } else if (m_state == READING_BODY) {
+        e = BODY_OK;
         if (m_handles[m_handleIndex]->mountBody(byte)) {
-            LOG_INF("State: NO_MESSAGE");
-            resetCandidates();
-            m_state = NO_MESSAGE;
+            e = BODY_BROKEN;
         }
     }
+    nextState(e);
 }
 
 void MsgManager::resetCandidates()
@@ -95,4 +122,12 @@ void MsgManager::resetCandidates()
         }
         m_candidates[i] = 0;
     }
+}
+
+char MsgManager::upperCase(char byte)
+{
+    if (byte >= 97 && byte <= 122) {
+        byte = byte - 32;
+    }
+    return byte;
 }

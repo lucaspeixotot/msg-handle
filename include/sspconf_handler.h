@@ -14,7 +14,8 @@ class SSPCONFHandler : public EventCommand
 {
    public:
     SSPCONFHandler(const char *prefix, const char *sufix, const char *init_body,
-                   const char *delimiter, u8_t argc);
+                   const char *delimiter, u8_t argc, struct k_mem_pool *memoryPool,
+                   u8_t bodyLength);
     int resolve();
 
    protected:

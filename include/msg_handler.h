@@ -9,12 +9,12 @@
 #include "stdlib.h"
 #include "string.h"
 
-#define MAX_BODY_LENGTH 80
 
 class MsgHandler
 {
    public:
-    MsgHandler(const char *prefix, const char *sufix);
+    MsgHandler(const char *prefix, const char *sufix, struct k_mem_pool *memoryPool,
+               u8_t bodyLength);
     virtual int resolve()
     {
         return -EINVAL;
@@ -30,7 +30,7 @@ class MsgHandler
     const char *m_sufix;
     u8_t m_currentChar;
     u8_t m_currentArg;
-    char m_body[MAX_BODY_LENGTH];
+    char *m_body;
     char *m_temp;
 
     void resetRead();

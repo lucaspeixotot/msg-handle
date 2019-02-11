@@ -3,8 +3,9 @@
 LOG_MODULE_REGISTER(sspconf_handler, 4);
 
 SSPCONFHandler::SSPCONFHandler(const char *prefix, const char *sufix, const char *init_body,
-                               const char *delimiter, u8_t argc)
-    : EventCommand(prefix, sufix, init_body, delimiter, argc)
+                               const char *delimiter, u8_t argc, struct k_mem_pool *memoryPool,
+                               u8_t bodyLength)
+    : EventCommand(prefix, sufix, init_body, delimiter, argc, memoryPool, bodyLength)
 {
 }
 

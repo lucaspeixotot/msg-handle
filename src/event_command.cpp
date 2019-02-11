@@ -1,11 +1,15 @@
 #include "event_command.h"
 
 
-LOG_MODULE_REGISTER(event_command, 2);
+LOG_MODULE_REGISTER(event_command, 3);
 
 EventCommand::EventCommand(const char *prefix, const char *sufix, const char *initBody,
-                           const char *delimiter, u8_t argc)
-    : MsgHandler(prefix, sufix), m_delimiter(delimiter), m_initBody(initBody), m_argc(argc)
+                           const char *delimiter, u8_t argc, struct k_mem_pool *memoryPool,
+                           u8_t bodyLength)
+    : MsgHandler(prefix, sufix, memoryPool, bodyLength),
+      m_delimiter(delimiter),
+      m_initBody(initBody),
+      m_argc(argc)
 {
     resetRead();
 }

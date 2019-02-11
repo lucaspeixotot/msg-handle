@@ -9,7 +9,7 @@ class EventCommand : public MsgHandler
 {
    public:
     EventCommand(const char *prefix, const char *sufix, const char *initBody, const char *delimiter,
-                 u8_t argc);
+                 u8_t argc, struct k_mem_pool *memoryPool, u8_t bodyLength);
     int mountBody(char byte);
     virtual int resolve()
     {
