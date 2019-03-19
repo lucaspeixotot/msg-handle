@@ -1,9 +1,13 @@
 #ifndef _GENERAL_COMMAND_H_
 #define _GENERAL_COMMAND_H_
 
+
+#include <string.h>
+
 #include "msg_handler.h"
 
-#define END_MSG 1
+
+enum mount_state { READING_INIT_BODY, READING_PAYLOAD, READING_SUFFIX, END_MSG };
 
 class EventCommand : public MsgHandler
 {
@@ -19,8 +23,10 @@ class EventCommand : public MsgHandler
    protected:
     const char *m_delimiter;
     const char *m_initBody;
+    mount_state m_state;
     u8_t m_currentChar;
     u8_t m_currentArg;
+    u8_t m_suffix_i;
     char *m_argv[10];
     u8_t m_argc;
     void resetRead();

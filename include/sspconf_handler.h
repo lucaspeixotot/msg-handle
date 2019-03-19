@@ -8,7 +8,7 @@
 #include "event_command.h"
 
 #define SSPCONF_PREFIX "SSPCONF"
-#define SSPCONF_SUFFIX "\r"
+#define SSPCONF_SUFFIX "---"
 
 class SSPCONFHandler : public EventCommand
 {
