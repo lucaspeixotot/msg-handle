@@ -75,9 +75,9 @@ void initUart(struct device *uart_dev)
 class SsppinHandler : public EventCommand
 {
    public:
-    SsppinHandler(const char *prefix, const char *sufix, const char *init_body,
+    SsppinHandler(const char *prefix, const char *suffix, const char *init_body,
                   const char *delimiter, u8_t argc, struct k_mem_pool *memoryPool, u8_t bodyLength)
-        : EventCommand(prefix, sufix, init_body, delimiter, argc, memoryPool, bodyLength)
+        : EventCommand(prefix, suffix, init_body, delimiter, argc, memoryPool, bodyLength)
     {
     }
     int resolve()
@@ -93,10 +93,10 @@ class SsppinHandler : public EventCommand
 class LeattmtuHandler : public EventCommand
 {
    public:
-    LeattmtuHandler(const char *prefix, const char *sufix, const char *init_body,
+    LeattmtuHandler(const char *prefix, const char *suffix, const char *init_body,
                     const char *delimiter, u8_t argc, struct k_mem_pool *memoryPool,
                     u8_t bodyLength)
-        : EventCommand(prefix, sufix, init_body, delimiter, argc, memoryPool, bodyLength)
+        : EventCommand(prefix, suffix, init_body, delimiter, argc, memoryPool, bodyLength)
     {
     }
     int resolve()
@@ -113,7 +113,7 @@ void main(void)
 {
     LOG_WRN("Firmware version: %d.%d.%d\n", version_get_major(), version_get_minor(),
             version_get_build());
-    SSPCONFHandler sspconf(SSPCONF_PREFIX, SSPCONF_SUFIX, " ", " ", 3, &memoryPool, 32);
+    SSPCONFHandler sspconf(SSPCONF_PREFIX, SSPCONF_SUFFIX, " ", " ", 3, &memoryPool, 32);
     LeattmtuHandler leattmtu("LEATTMTU", "\r", ":", ",", 2, &memoryPool, 32);
     SsppinHandler ssppin("SSPPIN", "\r", " ", " ", 2, &memoryPool, 32);
 

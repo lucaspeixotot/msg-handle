@@ -3,10 +3,10 @@
 
 LOG_MODULE_REGISTER(event_command, 3);
 
-EventCommand::EventCommand(const char *prefix, const char *sufix, const char *initBody,
+EventCommand::EventCommand(const char *prefix, const char *suffix, const char *initBody,
                            const char *delimiter, u8_t argc, struct k_mem_pool *memoryPool,
                            u8_t bodyLength)
-    : MsgHandler(prefix, sufix, memoryPool, bodyLength),
+    : MsgHandler(prefix, suffix, memoryPool, bodyLength),
       m_delimiter(delimiter),
       m_initBody(initBody),
       m_argc(argc)
@@ -30,7 +30,7 @@ int EventCommand::mountBody(char byte)
         return -EINVAL;
     }
 
-    if (byte == m_sufix[0]) {
+    if (byte == m_suffix[0]) {
         if (m_currentArg != m_argc) {
             LOG_INF("The message is broken, discarding it");
             resetRead();
@@ -54,4 +54,10 @@ int EventCommand::mountBody(char byte)
     }
 
     return 0;
+}
+
+void EventCommand::resetRead()
+{
+    m_currentChar = 255;
+    m_currentArg  = 0;
 }

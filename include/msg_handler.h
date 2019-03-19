@@ -13,27 +13,22 @@
 class MsgHandler
 {
    public:
-    MsgHandler(const char *prefix, const char *sufix, struct k_mem_pool *memoryPool,
+    MsgHandler(const char *prefix, const char *suffix, struct k_mem_pool *memoryPool,
                u8_t bodyLength);
     virtual int resolve()
     {
         return -EINVAL;
     };
     const char *prefix();
-    const char *sufix();
+    const char *suffix();
     char *splitPick(char *msg, const char *delimiter, u8_t n);
     char *strtok(char *str, const char *delimiter);
     virtual int mountBody(char byte) = 0;
 
    protected:
     const char *m_prefix;
-    const char *m_sufix;
-    u8_t m_currentChar;
-    u8_t m_currentArg;
+    const char *m_suffix;
     char *m_body;
-    char *m_temp;
-
-    void resetRead();
 };
 
 #endif
