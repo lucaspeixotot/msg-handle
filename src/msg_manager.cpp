@@ -1,7 +1,5 @@
 #include "msg_manager.h"
 
-LOG_MODULE_REGISTER(msg_manager, 3);
-
 MsgManager MsgManager::m_instance = MsgManager();
 
 int MsgManager::subscribe(MsgHandler *msgHandler)
@@ -23,11 +21,11 @@ int MsgManager::subscribe(MsgHandler *msgHandler)
     }
 
     if (available) {
-        LOG_INF("A new handler with prefix \"%s\" was added.", msgHandler->prefix());
+        printk("A new handler with prefix \"%s\" was added.\n", msgHandler->prefix());
         m_handles[nextIndexAvailable] = msgHandler;
         return 0;
     }
-    LOG_INF("Already exists a handler with this prefix");
+    printk("Already exists a handler with this prefix\n");
 
 
     return 0;
@@ -38,24 +36,24 @@ void MsgManager::nextState(event e)
     switch (m_state) {
     case NO_MESSAGE:
         if (e == MATCH) {
-            LOG_INF("State: READING_PREFIX");
+            printk("State: READING_PREFIX\n");
             m_state = READING_PREFIX;
             m_i     = 1;
         }
         break;
     case READING_PREFIX:
         if (e == NOT_MATCH) {
-            LOG_INF("State: NO_MESSAGE");
+            printk("State: NO_MESSAGE\n");
             m_state = NO_MESSAGE;
         } else if (e == PREFIX_COMPLETE) {
-            LOG_INF("State: READING_BODY");
+            printk("State: READING_BODY\n");
             m_i     = 0;
             m_state = READING_BODY;
         }
         break;
     case READING_BODY:
         if (e == BODY_BROKEN) {
-            LOG_INF("State: NO_MESSAGE");
+            printk("State: NO_MESSAGE\n");
             resetCandidates();
             m_state = NO_MESSAGE;
         }
@@ -67,7 +65,7 @@ void MsgManager::nextState(event e)
 
 void MsgManager::receiveByte(char byte)
 {
-    LOG_DBG("Byte received: %c", byte);
+    printk("Byte received: %c\n", byte);
     event e = NULL_EVENT;
     if (m_state == NO_MESSAGE) {
         e    = NOT_MATCH;
@@ -90,7 +88,7 @@ void MsgManager::receiveByte(char byte)
             }
             if (m_candidates[i]) {
                 if (m_handles[i]->prefix()[m_i] == byte) {
-                    LOG_DBG("%s continues", m_handles[i]->prefix());
+                    printk("%s continues\n", m_handles[i]->prefix());
                     e = MATCH;
                     if (m_i == strlen(m_handles[i]->prefix()) - 1) {
                         e             = PREFIX_COMPLETE;
@@ -99,8 +97,8 @@ void MsgManager::receiveByte(char byte)
                     }
                 } else {
                     m_candidates[i] = 0;
-                    LOG_DBG("%s is out", m_handles[i]->prefix());
-                    LOG_DBG("%c != %c", byte, m_handles[i]->prefix()[m_i]);
+                    printk("%s is out\n", m_handles[i]->prefix());
+                    printk("%c != %c\n", byte, m_handles[i]->prefix()[m_i]);
                 }
             }
         }

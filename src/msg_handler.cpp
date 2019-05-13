@@ -1,26 +1,28 @@
 #include "msg_handler.h"
 
-LOG_MODULE_REGISTER(msg_handler, 4);
-
-MsgHandler::MsgHandler(const char *prefix, const char *suffix, struct k_mem_pool *memoryPool,
-                       u8_t bodyLength)
-    : m_prefix(prefix), m_suffix(suffix)
+MsgHandler::MsgHandler(char *prefix, char *suffix)
 {
-    m_body = (char *) k_mem_pool_malloc(memoryPool, bodyLength);
-    if (!m_body) {
-        LOG_ERR(
-            "Error allocating memory to the msg handler named %s, there is no %d bytes available",
-            prefix, bodyLength);
-    }
+    memset(m_body, 0, BODY_LENGTH);
+    memset(m_prefix, 0, PREFIX_LENGTH);
+    memset(m_suffix, 0, SUFFIX_LENGTH);
+
+    strcpy(m_prefix, prefix);
+    strcpy(m_suffix, suffix);
 }
 
 
-const char *MsgHandler::prefix()
+char *MsgHandler::prefix()
 {
+    //memset(prefix, 0, PREFIX_LENGTH);
+    //strcpy(prefix, m_prefix);
+
     return m_prefix;
 }
 
-const char *MsgHandler::suffix()
+char *MsgHandler::suffix()
 {
+    //memset(suffix, 0, SUFFIX_LENGTH);
+    //strcpy(suffix, m_sufix);
+
     return m_suffix;
 }

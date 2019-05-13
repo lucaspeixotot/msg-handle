@@ -2,33 +2,30 @@
 #define _MSG_HANDLE_H_
 
 #include <errno.h>
-#include <logging/log.h>
 #include <misc/printk.h>
 #include <zephyr/types.h>
 
 #include "stdlib.h"
 #include "string.h"
+#include "globals.h"
 
 
 class MsgHandler
 {
    public:
-    MsgHandler(const char *prefix, const char *suffix, struct k_mem_pool *memoryPool,
-               u8_t bodyLength);
+    MsgHandler(char *prefix, char *suffix);
     virtual int resolve()
     {
         return -EINVAL;
     };
-    const char *prefix();
-    const char *suffix();
-    char *splitPick(char *msg, const char *delimiter, u8_t n);
-    char *strtok(char *str, const char *delimiter);
     virtual int mountBody(char byte) = 0;
+    char *prefix();
+    char *suffix();
 
    protected:
-    const char *m_prefix;
-    const char *m_suffix;
-    char *m_body;
+    char m_prefix[PREFIX_LENGTH];
+    char m_suffix[SUFFIX_LENGTH];
+    char m_body[BODY_LENGTH];
 };
 
 #endif

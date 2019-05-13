@@ -7,6 +7,7 @@
 
 #include "msg_handler.h"
 #include "string.h"
+#include "globals.h"
 
 
 // Defines

@@ -1,23 +1,24 @@
 #include "event_command.h"
 
-
-LOG_MODULE_REGISTER(event_command, 4);
-
-EventCommand::EventCommand(const char *prefix, const char *suffix, const char *initBody,
-                           const char *delimiter, u8_t argc, struct k_mem_pool *memoryPool,
-                           u8_t bodyLength)
-    : MsgHandler(prefix, suffix, memoryPool, bodyLength),
-      m_delimiter(delimiter),
-      m_initBody(initBody),
+EventCommand::EventCommand(char *prefix, char *suffix, char *initBody,
+                           char *delimiter, u8_t argc)
+    : MsgHandler(prefix, suffix),
       m_argc(argc)
 {
+    memset(m_delimiter, 0, DELIMITER_LENGTH);
+    strcpy(m_delimiter, delimiter);
+
+    memset(m_initBody, 0, INIT_BODY_LENGTH);
+    strcpy(m_initBody, initBody);
+
+
     resetRead();
 }
 
 int EventCommand::mountBody(char byte)
 {
-    LOG_DBG("Mounting the body");
-    LOG_DBG("%d", strlen(m_suffix));
+    printk("Mounting the body\n");
+    printk("%d", strlen(m_suffix));
     switch (m_state) {
     case READING_INIT_BODY:
         if (m_currentChar == 255) {
@@ -25,24 +26,24 @@ int EventCommand::mountBody(char byte)
                 m_currentArg++;
                 m_currentChar++;
                 m_state = READING_PAYLOAD;
-                LOG_DBG("Receiving the first byte");
+                printk("Receiving the first byte\n");
                 return 0;
             }
-            LOG_INF("The message is broken, discarding it");
+            printk("The message is broken, discarding it\n");
             return -EINVAL;
         }
         break;
     case READING_PAYLOAD:
         if (byte == m_suffix[0]) {
             if (m_currentArg != m_argc) {
-                LOG_INF("The message is broken, discarding it");
+                printk("The message is broken, discarding it\n");
                 resetRead();
                 return -EINVAL;
             }
             m_body[m_currentChar] = '\0';
             m_argv[0]             = (m_body + 0);
             if (strlen(m_suffix) == 1) {
-                LOG_INF("The message was readed successfuly");
+                printk("The message was readed successfuly\n");
                 resolve();
                 resetRead();
                 return END_MSG;
@@ -54,9 +55,9 @@ int EventCommand::mountBody(char byte)
         if (byte == m_delimiter[0]) {
             m_argv[m_currentArg++]  = (m_body + m_currentChar + 1);
             m_body[m_currentChar++] = '\0';
-            LOG_DBG("Reading a new delimiter, moving to %d° argument", m_currentArg);
+            printk("Reading a new delimiter, moving to %d° argument\n", m_currentArg);
         } else {
-            LOG_DBG("Adding a new byte to %d° argument", m_currentArg);
+            printk("Adding a new byte to %d° argument\n", m_currentArg);
             m_body[m_currentChar++] = byte;
         }
         break;
@@ -65,7 +66,7 @@ int EventCommand::mountBody(char byte)
             return -EINVAL;
         }
         if (m_suffix_i == strlen(m_suffix)) {
-            LOG_INF("The message was readed successfuly");
+            printk("The message was readed successfuly\n");
             resolve();
             resetRead();
             return END_MSG;
