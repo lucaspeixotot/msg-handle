@@ -12,8 +12,8 @@ enum mount_state { READING_INIT_BODY, READING_PAYLOAD, READING_SUFFIX, END_MSG }
 class EventCommand : public MsgHandler
 {
    public:
-    EventCommand(char *prefix, char *suffix, char *initBody,
-                 char *delimiter, u8_t argc);
+    EventCommand(const char *prefix, const char *suffix, const char *initBody,
+                 const char *delimiter, u8_t argc);
     int mountBody(char byte);
     virtual int resolve()
     {

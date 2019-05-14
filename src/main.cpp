@@ -55,8 +55,8 @@ void initUart(struct device *uart_dev)
 class SsppinHandler : public EventCommand
 {
    public:
-    SsppinHandler(char *prefix, char *suffix, char *init_body,
-                  char *delimiter, u8_t argc)
+    SsppinHandler(const char *prefix, const char *suffix, const char *init_body,
+                  const char *delimiter, u8_t argc)
         : EventCommand(prefix, suffix, init_body, delimiter, argc)
     {
     }
@@ -73,8 +73,8 @@ class SsppinHandler : public EventCommand
 class LeattmtuHandler : public EventCommand
 {
    public:
-    LeattmtuHandler(char *prefix, char *suffix, char *init_body,
-                    char *delimiter, u8_t argc)
+    LeattmtuHandler(const char *prefix, const char *suffix, const char *init_body,
+                    const char *delimiter, u8_t argc)
         : EventCommand(prefix, suffix, init_body, delimiter, argc)
     {
     }

@@ -1,7 +1,7 @@
 #include "event_command.h"
 
-EventCommand::EventCommand(char *prefix, char *suffix, char *initBody,
-                           char *delimiter, u8_t argc)
+EventCommand::EventCommand(const char *prefix, const char *suffix, const char *initBody,
+                           const char *delimiter, u8_t argc)
     : MsgHandler(prefix, suffix),
       m_argc(argc)
 {
@@ -18,7 +18,6 @@ EventCommand::EventCommand(char *prefix, char *suffix, char *initBody,
 int EventCommand::mountBody(char byte)
 {
     printk("Mounting the body\n");
-    printk("%d", strlen(m_suffix));
     switch (m_state) {
     case READING_INIT_BODY:
         if (m_currentChar == 255) {

@@ -1,7 +1,7 @@
 #include "sspconf_handler.h"
 
-SSPCONFHandler::SSPCONFHandler(char *prefix, char *suffix, char *init_body,
-                               char *delimiter, u8_t argc)
+SSPCONFHandler::SSPCONFHandler(const char *prefix, const char *suffix, const char *init_body,
+                               const char *delimiter, u8_t argc)
     : EventCommand(prefix, suffix, init_body, delimiter, argc)
 {
     printk("prefix %s\n", prefix);

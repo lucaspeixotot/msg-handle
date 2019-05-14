@@ -13,7 +13,7 @@
 class MsgHandler
 {
    public:
-    MsgHandler(char *prefix, char *suffix);
+    MsgHandler(const char *prefix, const char *suffix);
     virtual int resolve()
     {
         return -EINVAL;

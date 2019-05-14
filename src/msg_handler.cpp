@@ -1,6 +1,6 @@
 #include "msg_handler.h"
 
-MsgHandler::MsgHandler(char *prefix, char *suffix)
+MsgHandler::MsgHandler(const char *prefix, const char *suffix)
 {
     memset(m_body, 0, BODY_LENGTH);
     memset(m_prefix, 0, PREFIX_LENGTH);

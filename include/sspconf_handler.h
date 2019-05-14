@@ -13,8 +13,8 @@
 class SSPCONFHandler : public EventCommand
 {
    public:
-    SSPCONFHandler(char *prefix, char *suffix, char *init_body,
-                   char *delimiter, u8_t argc);
+    SSPCONFHandler(const char *prefix, const char *suffix, const char *init_body,
+                   const char *delimiter, u8_t argc);
     int resolve();
 
    protected:
